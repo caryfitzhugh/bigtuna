@@ -9,6 +9,11 @@
   = text_field_tag("configuration[server]", @hook.configuration["server"] || "irc.freenode.net")
 
 %div
+  = label_tag("IRC password")
+  %br
+  = text_field_tag("configuration[password]", @hook.configuration["password"])
+
+%div
   = label_tag("IRC port")
   %br
   = text_field_tag("configuration[port]", @hook.configuration["port"] || "6667")

@@ -29,15 +29,25 @@ module BigTuna
       end
 
       def perform
-        uri = "irc://#{@config[:user_name]}"
+        msg = @message
+        config = @config
+        bot = Cinch::Bot.new do
+          configure do |c|
+            c.nick = config[:user_name]
+            c.password = config[:password]
+            c.server = config[:server]
+            c.port = config[:port]
+            c.channels = [config[:room]]
+          end
 
-        #Password protected channels not currently supported by shout-bot
-        #uri += ":#{@config[:room_password]}" if @config[:room_password].present?
-
-        uri += "@#{@config[:server]}:#{@config[:port].present? ? @config[:port] : '6667'}"
-        uri += "/##{@config[:room].to_s.gsub("#","") }"
-        ShoutBot.shout(uri) { |channel| channel.say @message }
+          on :join do |m, e|
+            m.reply msg
+            bot.quit
+          end
+        end
+        bot.start
       end
+
     end
   end
 end
