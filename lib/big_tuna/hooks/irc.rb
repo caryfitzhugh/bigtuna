@@ -29,23 +29,28 @@ module BigTuna
       end
 
       def perform
-        msg = @message
-        config = @config
-        bot = Cinch::Bot.new do
-          configure do |c|
-            c.nick = config[:user_name]
-            c.password = config[:password]
-            c.server = config[:server]
-            c.port = config[:port]
-            c.channels = [config[:room]]
-          end
-
-          on :join do |m, e|
-            m.reply msg
-            bot.quit
-          end
-        end
-        bot.start
+        # Sometime going procedural is the simpler
+        require 'socket'
+        s= TCPSocket.open(@config[:server], @config[:port] || 6667)
+        s.puts "PASS #{@config[:password]}" if @config[:password]
+        puts "PASS #{@config[:password]}" if @config[:password]
+        s.puts "NICK #{@config[:user_name]}"
+        puts "NICK #{@config[:user_name]}"
+        s.puts "USER #{@config[:user_name]} 0 * :#{@config[:user_name]}"
+        puts "USER #{@config[:user_name]} 0 * :#{@config[:user_name]}"
+        sleep 12
+        puts s.recv 1000
+        s.puts "JOIN :#{@config[:room]}"
+        puts "JOIN :#{@config[:room]}"
+        sleep 7
+        puts s.recv 1000
+        s.puts "PRIVMSG #{@config[:room]} :#{@message}"
+        puts "PRIVMSG #{@config[:room]} :#{@message}"
+        s.puts "PART :#{@config[:room]}"
+        puts "PART :#{@config[:room]}"
+        s.puts "QUIT"
+        puts "QUIT"
+        puts s.gets until s.eof?
       end
 
     end
