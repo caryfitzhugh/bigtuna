@@ -17,10 +17,23 @@ module BigTuna
       Sender.delay.build_failed(build, recipients) unless recipients.blank?
     end
 
+    def build_still_passes(build, config)
+      project = build.project
+      Sender.delay.build_still_passes(build, recipients) unless recipients.blank?
+    end
+
+
     class Sender < ActionMailer::Base
       self.append_view_path("lib/big_tuna/hooks")
       default :from => "info@ci.appelier.com"
 
+      def build_still_passes(build, recipients)
+        @build = build
+        @project = @build.project
+        mail(:to => recipients, :subject => "Build '#{@build.display_name}' in '#{@project.name}' failed") do |format|
+          format.text { render "mailer/build_passes" }
+        end
+      end
       def build_failed(build, recipients)
         @build = build
         @project = @build.project
