@@ -1,27 +1,27 @@
 module BigTuna
   class Hooks::Irc < Hooks::Base
     NAME = "irc"
-    def self.description(build)
+    def description(build)
       "#{build.project.name}:#{build.commit.slice(0..6)}:#{build.author} #{build.commit_message.split("\n").slice(0..80)}"
     end
     def build_still_passes(build, config)
       project = build.project
-      Delayed::Job.enqueue(Job.new(config, "#{self.description(build)} STILL PASSES (#{build_url(build)})"))
+      Delayed::Job.enqueue(Job.new(config, "#{description(build)} STILL PASSES (#{build_url(build)})"))
     end
 
     def build_fixed(build, config)
       project = build.project
-      Delayed::Job.enqueue(Job.new(config, "#{self.description(build)} FIXED (#{build_url(build)})"))
+      Delayed::Job.enqueue(Job.new(config, "#{description(build)} FIXED (#{build_url(build)})"))
     end
 
     def build_still_fails(build, config)
       project = build.project
-      Delayed::Job.enqueue(Job.new(config, "#{self.description(build)} STILL FAILS (#{build_url(build)})"))
+      Delayed::Job.enqueue(Job.new(config, "#{description(build)} STILL FAILS (#{build_url(build)})"))
     end
 
     def build_failed(build, config)
       project = build.project
-      Delayed::Job.enqueue(Job.new(config, "#{self.description(build)} FAILED (#{build_url(build)})"))
+      Delayed::Job.enqueue(Job.new(config, "#{description(build)} FAILED (#{build_url(build)})"))
     end
 
     class Job
