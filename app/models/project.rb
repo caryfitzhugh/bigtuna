@@ -153,10 +153,15 @@ class Project < ActiveRecord::Base
   def remove_project_jobs_in_queue
     jobs_to_destroy = []
     Delayed::Job.all.each do |job|
-      build = job.payload_object
-      next unless build.is_a?(Build)
-      if build.status = Build::STATUS_IN_QUEUE && build.project == self
-        jobs_to_destroy << job
+      begin
+        build = job.payload_object
+        next unless build.is_a?(Build)
+        if build.status = Build::STATUS_IN_QUEUE && build.project == self
+          jobs_to_destroy << job
+        end
+      rescue Exception => e
+        Rails.logger.info "Bad job payload"
+	jobs_to_destroy << job
       end
     end
     jobs_to_destroy.each { |job| job.destroy }
