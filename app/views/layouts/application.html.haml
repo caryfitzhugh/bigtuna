@@ -12,9 +12,6 @@
     %meta{:name => "description", :content => "description"}
   %body
     #main
-      %div#ad{:style=>'height: auto;width: 225px;'}
-        checked by
-        %img{:src=>'/doozer.png'}
       #content
         = flash[:error]
         = flash[:notice]
@@ -22,4 +19,8 @@
       %ol#sidebar
         %li= link_to("home", root_path, :class => "black_button")
         = yield :sidebar
+      %div#ad
+        checked by
+        %a{:href=>"http://www.youtube.com/watch?v=j7TTk_0XYn4"}
+          %img{:src=>'/doozer.png'}
       #footer
