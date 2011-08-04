@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+export RAILS_ENV=production
+cd /home/ziplist/bigtuna
+if [[ -s "/home/ziplist/.rvm/environments/ruby-1.9.2-p180" ]]
+then
+  source "/home/ziplist/.rvm/environments/ruby-1.9.2-p180"
+  exec /home/ziplist/bigtuna/script/delayed_job "$@"
+else
+  echo "ERROR: Missing RVM environment file: '/home/ziplist/.rvm/environments/ruby-1.9.2-p180'" >&2
+  exit 1
+fi
+  
