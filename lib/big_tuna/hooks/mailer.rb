@@ -25,7 +25,7 @@ module BigTuna
 
     class Sender < ActionMailer::Base
       self.append_view_path("lib/big_tuna/hooks")
-      default :from => "info@ci.appelier.com"
+      default :from => ActionMailer::Base.smtp_settings[:username] || "set_username_in_email.yml"
 
       def build_still_passes(build, recipients)
         @build = build

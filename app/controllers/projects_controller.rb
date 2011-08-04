@@ -6,6 +6,9 @@ class ProjectsController < ApplicationController
   def index
     @projects = Project.order("position ASC")
   end
+  def top
+   @top_output = `top -b -n 1`
+  end
 
   def show
     @builds = @project.builds.order("created_at DESC").limit(@project.max_builds).includes(:project, :parts).all

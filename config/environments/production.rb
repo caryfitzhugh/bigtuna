@@ -36,11 +36,11 @@ BigTuna::Application.configure do
   #config.action_mailer.delivery_method = :sendmail
   config.action_mailer.delivery_method = :smtp
 
-  #if File.exists?(File.join(Rails.root, 'config', 'email.yml'))
-  #  config.action_mailer.smtp_settings = YAML.load_file("config/email.yml")[Rails.env]
-  #else
-  #  warn "WARNING: config/email.yml does not exist. Email notifications will not work."
-  #end
+  if File.exists?(File.join(Rails.root, 'config', 'email.yml'))
+    config.action_mailer.smtp_settings = YAML.load_file("config/email.yml")[Rails.env]
+  else
+    warn "WARNING: config/email.yml does not exist. Email notifications will not work."
+  end
 
   if BigTuna.config[:url_host]
     config.action_mailer.default_url_options = { :host => BigTuna.config[:url_host] }
