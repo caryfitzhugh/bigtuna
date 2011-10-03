@@ -27,9 +27,9 @@
     - passing = part.output.select {|out| out.exit_code == 0}.size
     - failing = part.output.size - passing
     - style = failing.size > 0 ? 'color: red;' : 'color: green;'
-    %a{:href=>'javascript:void(0)', :onclick=>'$(this).parent().find(".details").toggle();', :style=>"#{style} font-size: smallest"}
+    %a{:href=>'javascript:void(0)', :style=>"#{style} font-size: smallest"}
       Details (#{passing} Pass / #{failing} Fail)
-    .details{:style=>"display: none;"}
+    .details
       %ol{:id => "part_#{index}"}
         - part.output.each_with_index do |output, index|
           %li{:id => "step_#{index + 1}"}
