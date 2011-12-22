@@ -3,7 +3,7 @@ require 'uri'
 
 module BigTuna
   class Hooks::ZipBot < Hooks::Base
-    NAME="zipbot"
+    NAME="zip_bot"
 
     def build_started(build, config)
       Delayed::Job.enqueue(Job.new(config, build, :started))
