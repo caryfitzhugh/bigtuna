@@ -25,7 +25,7 @@ class Build < ActiveRecord::Base
     self.update_attributes!(:status => STATUS_PROGRESS)
     self.started_at = Time.now
     project.hooks.each do |hook|
-      hook.build_started(build)
+      hook.build_started(self)
     end
 
     project = self.project
