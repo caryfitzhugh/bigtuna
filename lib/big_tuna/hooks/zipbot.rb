@@ -2,7 +2,7 @@ require 'net/http'
 require 'uri'
 
 module BigTuna
-  class Hooks::Irc < Hooks::Base
+  class Hooks::ZipBot < Hooks::Base
     NAME="zipbot"
 
     def build_started(build, config)
