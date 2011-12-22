@@ -3,5 +3,5 @@
 %div
   = f.text_area(:steps, :class => 'textarea')
 %div
-  %button.black_button{:type => "submit"}
+  %button.black_button{:type => "submit", :style=>'float:right'}
     = f.object.new_record? ? "Create" : "Update"

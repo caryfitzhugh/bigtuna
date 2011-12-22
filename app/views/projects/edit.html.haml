@@ -13,7 +13,7 @@
 
 %h2 Available configurations
 - @project.step_lists.each do |step_list|
-  %div.hint
+  %div.hint{:style=>'clear:both'}
     %ul
       - step_list.shared_variables.each do |variable|
         %li= "<tt><b>%#{variable.name}%</b> #{variable.value}</tt>".html_safe
@@ -22,4 +22,4 @@
     = render :partial => "step_lists/form", :locals => {:f => f}
   - unless step_list.new_record?
     = form_for(step_list, :url => step_list_path(step_list, :project_id => @project), :html => {:method => "DELETE", :id => "remove_step_list_#{step_list.id}"}) do |f|
-      %button.crit_button{:type => "submit"} Remove
+      %button.black_button{:type => "submit", :style=>'float:right'} Remove
