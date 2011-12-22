@@ -7,6 +7,8 @@ class Hook < ActiveRecord::Base
   before_create :enable_all_hooks
 
   def backend
+    BigTuna.logger.error("backend: ")
+    BigTuna.logger.error(BigTuna.hooks.to_yaml)
     @backend ||= BigTuna.hooks.find { |e| e::NAME == hook_name }.new
   end
 
