@@ -24,6 +24,10 @@ class Build < ActiveRecord::Base
   def perform
     self.update_attributes!(:status => STATUS_PROGRESS)
     self.started_at = Time.now
+    project.hooks.each do |hook|
+      hook.build_started(build)
+    end
+
     project = self.project
     begin
       out = fetch_project_sources(project)
@@ -147,7 +151,7 @@ class Build < ActiveRecord::Base
       hook.build_finished(self)
     end
   end
-  
+
   def compute_build_dir
     if project.fetch_type == :incremental
       File.join(project.build_dir, "checkout")
@@ -155,7 +159,7 @@ class Build < ActiveRecord::Base
       File.join(project.build_dir, "build_#{self.build_no}_#{self.scheduled_at.strftime("%Y%m%d%H%M%S")}")
     end
   end
-  
+
   def fetch_project_sources(project)
     case project.fetch_type
     when :clone
@@ -164,7 +168,7 @@ class Build < ActiveRecord::Base
       fetch_project_sources_incrementally
     end
   end
-  
+
   def fetch_project_sources_incrementally
     if project_sources_already_present?
       update_project
@@ -172,20 +176,20 @@ class Build < ActiveRecord::Base
       fetch_project_sources_by_cloning
     end
   end
-  
+
   def fetch_project_sources_by_cloning
     clone_project
   end
-  
+
   def clone_project
     project.vcs.clone(self.build_dir)
   end
-  
+
   def update_project
     project.vcs.update(self.build_dir)
   end
-  
+
   def project_sources_already_present?
-    File.directory? self.build_dir 
+    File.directory? self.build_dir
   end
 end

@@ -17,6 +17,7 @@ class BuildPart < ActiveRecord::Base
 
   def perform
     self.update_attributes!(:status => STATUS_PROGRESS, :started_at => Time.now)
+
     all_steps = []
     steps.split("\n").each do |step|
       step = format_step_command(step)
