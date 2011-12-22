@@ -5,10 +5,6 @@ module BigTuna
   class Hooks::Irc < Hooks::Base
     NAME="bigtuna"
 
-    def description(build)
-      "#{build.project.name}:#{build.commit.slice(0..6)}:#{build.author} #{build.commit_message.split("\n").slice(0..80)}"
-    end
-
     def build_started(build, config)
       Delayed::Job.enqueue(Job.new(config, build, :started))
     end
@@ -38,7 +34,9 @@ module BigTuna
       def perform
         host = URI.parse(@config.host)
         host.path = "/testing/#{@build.project.vcs_branch}/#{@state.to_s}"
+        BigTuna.logger.info("POSTING: #{host.to_s}")
         res = Net::HTTP.post_form(host)
       end
+    end
   end
 end
