@@ -25,6 +25,7 @@ class HooksController < ApplicationController
       project.vcs_type   = vcs_type if vcs_type
       project.save!
       project.build!
+      render :text=>"We are ready to go! Thanks!"
     end
 
   end
