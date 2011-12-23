@@ -13,14 +13,16 @@ class HooksController < ApplicationController
   def zipbot
     git_repo = params[:repository]
     branch   = params[:branch]
-    vcs_type = params[:vcs_type] || 'git'
-    project = Project.where(:name => "zipbot")
+    vcs_type = params[:vcs_type]
+
+    project = Project.where(:name => "zipbot").first
+
     if (!project)
       render :text=>"You need to create a project with name 'zipbot' to use this", :status=>400
     else
-      project.vcs_source = git_repo
-      project.vcs_branch = branch
-      project.vcs_type   = vcs_type
+      project.vcs_source = git_repo if git_repo
+      project.vcs_branch = branch   if branch
+      project.vcs_type   = vcs_type if vcs_type
       project.save!
       project.build!
     end
