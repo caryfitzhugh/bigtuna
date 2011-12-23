@@ -119,11 +119,12 @@ class Build < ActiveRecord::Base
         :shared_variables => replacements,
       }
 
+      part = self.parts.build(attrs)
+      part.save!
+
       project.hooks.each do |hook|
         hook.build_step_started(self, part)
       end
-      part = self.parts.build(attrs)
-      part.save!
 
       part.build!
     end
