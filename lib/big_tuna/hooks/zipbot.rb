@@ -35,7 +35,7 @@ module BigTuna
       end
 
       def perform
-        BigTuna.logger.info("Getting ready to post #{@state}"
+        BigTuna.logger.info("Getting ready to post #{@state}")
         host = URI.parse(@config['host'])
         host.path = "/testing/#{@build.project.vcs_branch}/#{@state.to_s}"
         body = {:repo => @build.project.vcs_source,
