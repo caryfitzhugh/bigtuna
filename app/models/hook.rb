@@ -7,7 +7,10 @@ class Hook < ActiveRecord::Base
   before_create :enable_all_hooks
 
   def backend
-    @backend ||= BigTuna.hooks.find { |e| e::NAME == hook_name }.new
+    @backend ||= BigTuna.hooks.find do |e|
+      BigTuna.logger.info "Looking for backend #{hook_name} ... ? #{e::NAME}"
+      e::NAME == hook_name
+    end.new
   end
 
   def configuration
