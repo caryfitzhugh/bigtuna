@@ -8,16 +8,9 @@ module BigTuna
     def build_started(build, config)
       enqueue(config, build, :started)
     end
-    def build_still_passes(build, config)
-      enqueue(config, build, :passed)
-    end
 
-    def build_fixed(build, config)
+    def build_passed(build, config)
       enqueue(config, build, :passed)
-    end
-
-    def build_still_fails(build, config)
-      enqueue(config, build, :failed)
     end
 
     def build_failed(build, config)

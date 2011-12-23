@@ -134,8 +134,9 @@ class Build < ActiveRecord::Base
     previous_build = self.project.builds.order("created_at DESC").offset(1).first
     build_fixed = (status == STATUS_OK && previous_build && previous_build.status == STATUS_FAILED)
     build_still_passes = (status == STATUS_OK && previous_build && previous_build.status == STATUS_OK)
-    BigTuna.logger.info "After passed, now hitting hooks"
+    BigTuna.logger.info "After passed, now hitting hooks, #{project.hooks}"
     project.hooks.each do |hook|
+      BigTuna.logger.info "passed. build_passed hook #{hook}"
       hook.build_passed(self)
       hook.build_still_passes(self) if build_still_passes
       hook.build_fixed(self) if build_fixed
