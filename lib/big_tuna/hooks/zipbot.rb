@@ -34,8 +34,10 @@ module BigTuna
       def perform
         host = URI.parse(@config['host'])
         host.path = "/testing/#{@build.project.vcs_branch}/#{@state.to_s}"
-        BigTuna.logger.info("POSTING: #{host.to_s}")
-        res = Net::HTTP.post_form(host,{:build=>@build.attributes})
+        body = {:build=>@build.attributes,
+                :project => @build.project.attributes}
+        BigTuna.logger.info("POSTING: #{host.to_s}, => #{body}")
+        res = Net::HTTP.post_form(host,body)
       end
     end
 
