@@ -120,6 +120,9 @@ class Build < ActiveRecord::Base
       }
       part = self.parts.build(attrs)
       part.save!
+      project.hooks.each do |hook|
+        hook.build_step_started(self, part)
+      end
       part.build!
     end
   end

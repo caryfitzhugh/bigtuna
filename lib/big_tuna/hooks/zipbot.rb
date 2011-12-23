@@ -23,6 +23,9 @@ module BigTuna
     def build_failed(build, config)
       enqueue(config, build, :failed)
     end
+    def build_step_started(build, config, build_part)
+      enqueue(config, build, "started: #{build_part.name}")
+    end
 
     class Job
       def initialize(config, build, state)
