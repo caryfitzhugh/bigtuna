@@ -8,7 +8,6 @@ class Hook < ActiveRecord::Base
 
   def backend
     @backend ||= BigTuna.hooks.find do |e|
-      BigTuna.logger.info "Looking for backend #{hook_name} ... ? #{e::NAME}"
       e::NAME == hook_name
     end.new
   end

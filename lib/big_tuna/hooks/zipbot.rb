@@ -6,22 +6,22 @@ module BigTuna
     NAME="zipbot"
 
     def build_started(build, config)
-      Delayed::Job.enqueue(Job.new(config, build, :started))
+      enqueue(config, build, :started)
     end
     def build_still_passes(build, config)
-      Delayed::Job.enqueue(Job.new(config, build, :passed))
+      enqueue(config, build, :passed)
     end
 
     def build_fixed(build, config)
-      Delayed::Job.enqueue(Job.new(config, build, :passed))
+      enqueue(config, build, :passed)
     end
 
     def build_still_fails(build, config)
-      Delayed::Job.enqueue(Job.new(config, build, :failed))
+      enqueue(config, build, :failed)
     end
 
     def build_failed(build, config)
-      Delayed::Job.enqueue(Job.new(config, build, :failed))
+      enqueue(config, build, :failed)
     end
 
     class Job
@@ -37,6 +37,12 @@ module BigTuna
         BigTuna.logger.info("POSTING: #{host.to_s}")
         res = Net::HTTP.post_form(host)
       end
+    end
+
+    private
+    def enqueue(config, build, state)
+      BigTuna.logger.info "Zipbot: #{config}, #{build}, #{state}"
+      Delayed::Job.enqueue(Job.new(config, build, state))
     end
   end
 end
