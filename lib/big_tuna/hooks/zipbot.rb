@@ -35,13 +35,16 @@ module BigTuna
       end
 
       def perform
-        BigTuna.logger.info("Getting ready to post #{@state}")
-        host = URI.parse(@config['host'])
-        host.path = URI.encode("/testing/#{@build.project.vcs_branch}/#{@state.to_s}")
-        body = {:repo => @build.project.vcs_source,
-                :build=>@build.attributes}
-        BigTuna.logger.info("POSTING: #{host.to_s}, => #{body}")
-        res = Net::HTTP.post_form(host,body)
+        begin
+          host = URI.parse(@config['host'])
+          host.path = URI.encode("/testing/#{@build.project.vcs_branch}/#{@state.to_s}")
+          body = {:repo => @build.project.vcs_source,
+                  :build=>@build.attributes}
+          BigTuna.logger.info("POSTING: #{host.to_s}, => #{body}")
+          res = Net::HTTP.post_form(host,body)
+        rescue Exception => e
+          BigTuna.logger.info("POSTING err: #{e}")
+        end
       end
     end
 

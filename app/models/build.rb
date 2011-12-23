@@ -118,11 +118,13 @@ class Build < ActiveRecord::Base
         :steps => step_list.steps,
         :shared_variables => replacements,
       }
-      part = self.parts.build(attrs)
-      part.save!
+
       project.hooks.each do |hook|
         hook.build_step_started(self, part)
       end
+      part = self.parts.build(attrs)
+      part.save!
+
       part.build!
     end
   end
@@ -131,6 +133,7 @@ class Build < ActiveRecord::Base
     previous_build = self.project.builds.order("created_at DESC").offset(1).first
     build_fixed = (status == STATUS_OK && previous_build && previous_build.status == STATUS_FAILED)
     build_still_passes = (status == STATUS_OK && previous_build && previous_build.status == STATUS_OK)
+    BigTuna.logger.info "After passed, now hitting hooks"
     project.hooks.each do |hook|
       hook.build_passed(self)
       hook.build_still_passes(self) if build_still_passes
