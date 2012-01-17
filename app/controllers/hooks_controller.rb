@@ -10,28 +10,9 @@ class HooksController < ApplicationController
     end
   end
 
-  def zipbot
-    git_repo = params[:repository]
-    branch   = params[:branch]
-    vcs_type = params[:vcs_type]
-
-    project = Project.where(:name => "zipbot").first
-
-    if (!project)
-      render :text=>"You need to create a project with name 'zipbot' to use this", :status=>400
-    else
-      project.vcs_source = git_repo if git_repo
-      project.vcs_branch = branch   if branch
-      project.vcs_type   = vcs_type if vcs_type
-      project.save!
-      project.build!
-      render :text=>"We are ready to go! Thanks!"
-    end
-
-  end
-
   def github
     payload = JSON.parse(params[:payload])
+    logger.info "Received a github hook: #{payload.to_yaml}"
     branch = payload["ref"].split("/").last
     url = payload["repository"]["url"]
     public_source = url.gsub(/^https:\/\//, "git://") + ".git"
@@ -40,6 +21,13 @@ class HooksController < ApplicationController
 
     project = Project.where(["(vcs_source = ? or vcs_source = ?) AND (vcs_branch = ?)",
                               public_source, private_source, branch]).first
+    if (!project)
+      branch = "_any_"
+      project = Project.where(["(vcs_source = ? or vcs_source = ?) AND (vcs_branch = ?)",
+                              public_source, private_source, branch]).first
+    end
+
+    logger.info "Hitting #{project}"
 
     if BigTuna.github_secure.nil?
       render :text => "github secure token is not set up", :status => 403
