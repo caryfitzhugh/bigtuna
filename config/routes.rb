@@ -9,7 +9,7 @@ BigTuna::Application.routes.draw do
   else
 
     resources :projects do
-      member { get "build"; get "remove"; get "arrange"; get "feed" }
+      member { get "build"; get "remove"; get "arrange"; get "feed"; get "duplicate" }
       match "/hooks/:name/configure", :to => "hooks#configure", :as => "config_hook"
     end
     resources :builds

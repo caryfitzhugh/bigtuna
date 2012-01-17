@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem "rails", "3.0.3"
+gem "rails", "~> 3.0.3"
 gem "sqlite3-ruby"
 gem "haml"
 gem "delayed_job"
@@ -17,6 +17,11 @@ gem "notifo"
 
 # campfire notifications
 gem "tinder"
+
+case ENV["DB"]
+when "mysql" then gem "mysql2", "~>0.2.0"
+when "postgres" then gem "pg"
+end
 
 group :development, :test do
   gem "capybara"

@@ -1,8 +1,8 @@
 class ProjectsController < ApplicationController
-  before_filter :locate_project, :only => [:show, :build, :edit, :update, :remove, :destroy, :arrange, :feed]
+  before_filter :locate_project, :only => [:show, :build, :edit, :update, :remove, :destroy, :arrange, :feed, :duplicate]
   respond_to :js, :only => [:index, :show]
-  
-  
+
+
   def index
     @projects = Project.order("position ASC")
   end
@@ -25,6 +25,14 @@ class ProjectsController < ApplicationController
     @project.build!
     redirect_to(project_path(@project))
   rescue BigTuna::VCS::Error => e
+    flash[:error] = e.message
+    redirect_to project_path(@project)
+  end
+
+  def duplicate
+    project_clone = @project.duplicate_project
+    redirect_to project_path(project_clone)
+  rescue ActiveRecord::RecordInvalid => e
     flash[:error] = e.message
     redirect_to project_path(@project)
   end

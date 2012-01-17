@@ -22,7 +22,5 @@
     %li= link_to("Edit", edit_project_path(@project), :class => "black_button")
     %li= link_to("Remove project", remove_project_path(@project), :class => "black_button")
     %li= link_to("Build now", build_project_path(@project), :class => "black_button")
-  %li
-    %a.black_button{:href=>feed_project_path(@project, :format=>"atom")}
-      RSS Feed
-      %img{:style=>'vertical-align: sub;', :src=>'/images/icon_rss.gif'}
+    %Li= link_to("Duplicate", duplicate_project_path(@project), :class => "black_button")
+    %li= link_to("Feed", feed_project_path(@project, :format => "atom"), :class => "rss")
