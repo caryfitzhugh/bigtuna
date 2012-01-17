@@ -19,6 +19,7 @@ class HooksController < ApplicationController
     private_source = url.gsub(/^https:\/\//, "git@").
                          gsub(/github.com\//, "github.com:") + ".git"
 
+    logger.info "Looking up #{public_source} , #{private_source} with branch #{branch}"
     project = Project.where(["(vcs_source = ? or vcs_source = ?) AND (vcs_branch = ?)",
                               public_source, private_source, branch]).first
     if (!project)
@@ -27,7 +28,7 @@ class HooksController < ApplicationController
                               public_source, private_source, branch]).first
     end
 
-    logger.info "Hitting #{project}"
+    logger.info "Hitting [#{project}]"
 
     if BigTuna.github_secure.nil?
       render :text => "github secure token is not set up", :status => 403
