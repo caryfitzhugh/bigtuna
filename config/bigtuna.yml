@@ -1,6 +1,6 @@
 production:
   read_only: false                   # default: false
-  github_secure: "ziplist_doozers!" # default: nil
+  github_secure: "ziplist_doozers!"  # default: nil
   url_host: "fragglerock.ziplist.com"
-  ajax_reload: "always"                  # "building" or "always"
-  build_dir: "builds"                       # default: "builds"
+  ajax_reload: "building"            # "building" or "always"
+  build_dir: "builds"                # default: "builds"
