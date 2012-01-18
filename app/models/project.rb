@@ -1,6 +1,6 @@
 class Project < ActiveRecord::Base
   STATUS_NOT_BUILT = "status_not_built"
-  attr_accessor :hook_update, :build_any
+  attr_accessor :hook_update
 
   has_many :builds, :dependent => :destroy
   has_many :step_lists, :dependent => :destroy
