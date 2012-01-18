@@ -22,10 +22,12 @@ class HooksController < ApplicationController
     logger.info "Looking up #{public_source} , #{private_source} with branch #{branch}"
     project = Project.where(["(vcs_source = ? or vcs_source = ?) AND (vcs_branch = ?)",
                               public_source, private_source, branch]).first
+
     if (!project)
-      branch = "_any_"
-      project = Project.where(["(vcs_source = ? or vcs_source = ?) AND (vcs_branch = ?)",
-                              public_source, private_source, branch]).first
+      project = Project.where(["(vcs_source = ? or vcs_source = ?) AND (build_any = ?)",
+                              public_source, private_source, true]).first
+      project.vcs_branch = branch
+      project.save!
     end
 
     logger.info "Hitting [#{project}]"
