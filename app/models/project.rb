@@ -1,6 +1,6 @@
 class Project < ActiveRecord::Base
   STATUS_NOT_BUILT = "status_not_built"
-  attr_accessor :hook_update
+  attr_accessor :hook_update, :build_any
 
   has_many :builds, :dependent => :destroy
   has_many :step_lists, :dependent => :destroy
@@ -8,15 +8,15 @@ class Project < ActiveRecord::Base
   before_update :rename_build_folder
   before_create :set_default_build_counts
   after_save :update_hooks
-  
+
   validates :hook_name, :uniqueness => {:allow_blank => true}
   validates :name, :presence => true, :uniqueness => true
   validates :vcs_type, :inclusion => BigTuna.vcses.map { |e| e::VALUE }
   validates :vcs_source, :presence => true
   validates :vcs_branch, :presence => true
-  
+
   validate :validate_vcs_incremental_support
-  
+
   acts_as_list
 
   def self.ajax_reload?
@@ -120,7 +120,7 @@ class Project < ActiveRecord::Base
   def hooks=(hooks)
     @_hooks = hooks
   end
-  
+
   def fetch_type
     if self[:fetch_type]
       self[:fetch_type].to_sym
@@ -128,7 +128,7 @@ class Project < ActiveRecord::Base
       :clone
     end
   end
-  
+
   private
   def build_dir_from_name(name)
     if BigTuna.build_dir[0] == '/'[0]
@@ -187,7 +187,7 @@ class Project < ActiveRecord::Base
     end
     jobs_to_destroy.each { |job| job.destroy }
   end
-  
+
   def validate_vcs_incremental_support
     errors.add(:fetch_type, " #{fetch_type} not support by the vcs") if fetch_type == :incremental && !vcs.support_incremental_build?
   end
