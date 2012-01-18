@@ -19,9 +19,10 @@
   %br
   = f.text_field(:vcs_branch, :class => 'textfield')
 %div
-  = f.label(:build_any)
+  <label> Build any branch requested of this project? </label>
   %br
-  = f.check_box(:build_any)
+  <input type='hidden' name='project[build_any]' value='0'></input>
+  <input type='checkbox' name='project[build_any]' value='1'></input>
 %div
   = f.label(:fetch_type)
   %br
