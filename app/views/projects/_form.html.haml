@@ -21,8 +21,11 @@
 %div
   <label> Build any branch requested of this project? </label>
   %br
-  <input type='hidden' name='project[build_any]' value='0'></input>
-  <input type='checkbox' name='project[build_any]' value='1' <%= f.object.build_any ? 'checked' : ''%> ></input>
+  <input type='hidden' name='project[build_any]' value='0'/>
+  <input type='checkbox' name='project[build_any]' value='1'
+    <%if f.object.build_any %>
+      checked
+    <%end%> />
 %div
   = f.label(:fetch_type)
   %br
