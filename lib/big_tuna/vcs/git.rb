@@ -35,7 +35,7 @@ module BigTuna::VCS
       begin
         output = BigTuna::Runner.execute(self.source, command)
       rescue BigTuna::Runner::Error => e
-        raise BigTuna::VCS::Error.new("Couldn't access repository log")
+        raise BigTuna::VCS::Error.new("Couldn't access repository log: #{e}")
       end
       head_hash = output.stdout
       info[:commit] = head_hash.shift
@@ -54,7 +54,7 @@ module BigTuna::VCS
       end
       BigTuna::Runner.execute(Dir.pwd, command)
     end
-    
+
     def update(where_to)
       command = 'git clean -fd && git pull'
       BigTuna::Runner.execute(where_to, command)
