@@ -35,7 +35,7 @@ module BigTuna::VCS
       begin
         output = BigTuna::Runner.execute(self.source, command)
       rescue BigTuna::Runner::Error => e
-        raise BigTuna::VCS::Error.new("Couldn't access repository log: #{e}")
+        raise BigTuna::VCS::Error.new("Couldn't access repository log: \ncommand:\n#{command}\nsource:\n#{self.source}\nBacktrace:\n#{e.backtrace.join("\n")}")
       end
       head_hash = output.stdout
       info[:commit] = head_hash.shift
