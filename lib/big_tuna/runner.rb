@@ -32,7 +32,7 @@ module BigTuna
         ensure
           ENV["RAILS_ENV"] = rails_env if rails_env # if nil, then don't set any key
           ENV["BUNDLE_GEMFILE"] = old_bundle_gemfile if old_bundle_gemfile
-          EMV["BIGTUNA_WORKER"] = $0
+          ENV["BIGTUNA_WORKER"] = $0
         end
       end
     end
