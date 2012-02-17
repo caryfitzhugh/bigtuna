@@ -28,11 +28,11 @@ module BigTuna
             old_bundle_gemfile = ENV.delete("BUNDLE_GEMFILE")
             ENV["BUNDLE_GEMFILE"] = bundle_gemfile
           end
+          ENV["BIGTUNA_WORKER"] = $0
           yield
         ensure
           ENV["RAILS_ENV"] = rails_env if rails_env # if nil, then don't set any key
           ENV["BUNDLE_GEMFILE"] = old_bundle_gemfile if old_bundle_gemfile
-          ENV["BIGTUNA_WORKER"] = $0
         end
       end
     end
