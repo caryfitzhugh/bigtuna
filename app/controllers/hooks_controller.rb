@@ -16,15 +16,16 @@ class HooksController < ApplicationController
     branch = payload["ref"].split("/").last
     url = payload["repository"]["url"]
 
-    # If the repo in bigtuna is different than the one passed in --
-    if (params[:host])
-      url = url.gsub(/github.com/, params[:host])
-      logger.info "Replaced host #{params[:host]} - now url is #{url}"
-    end
-
     public_source = url.gsub(/^https:\/\//, "git://") + ".git"
     private_source = url.gsub(/^https:\/\//, "git@").
                          gsub(/github.com\//, "github.com:") + ".git"
+
+    # If the repo in bigtuna is different than the one passed in --
+    if (params[:host])
+      public_source = url.gsub(/github.com/, params[:host])
+      private_source=  url.gsub(/github.com/, params[:host])
+      logger.info "Replaced host #{params[:host]}"
+    end
 
 
     logger.info "Looking up #{public_source} , #{private_source} with branch #{branch}"
