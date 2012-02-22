@@ -22,8 +22,8 @@ class HooksController < ApplicationController
 
     # If the repo in bigtuna is different than the one passed in --
     if (params[:host])
-      public_source = url.gsub(/github.com/, params[:host])
-      private_source=  url.gsub(/github.com/, params[:host])
+      public_source =  public_source.gsub(/github.com/, params[:host])
+      private_source=  private_source.gsub(/github.com/, params[:host])
       logger.info "Replaced host #{params[:host]}"
     end
 
