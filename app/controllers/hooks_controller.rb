@@ -15,9 +15,17 @@ class HooksController < ApplicationController
     logger.info "Received a github hook: #{payload.to_yaml}"
     branch = payload["ref"].split("/").last
     url = payload["repository"]["url"]
+
+    # If the repo in bigtuna is different than the one passed in --
+    if (params[:host])
+      url = url.gsub(/github.com/, params[:host])
+      logger.info "Replaced host #{params[:host]} - now url is #{url}"
+    end
+
     public_source = url.gsub(/^https:\/\//, "git://") + ".git"
     private_source = url.gsub(/^https:\/\//, "git@").
                          gsub(/github.com\//, "github.com:") + ".git"
+
 
     logger.info "Looking up #{public_source} , #{private_source} with branch #{branch}"
     project = Project.where(["(vcs_source = ? or vcs_source = ?) AND (vcs_branch = ?)",
